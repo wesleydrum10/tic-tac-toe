@@ -320,6 +320,7 @@ span {
   color: var(--bg-gray-default);
   font-weight: 700;
   outline: none;
+  cursor: pointer;
 }
 
 #vs-cpu {
@@ -330,6 +331,10 @@ span {
 #vs-player {
   background-color: var(--color-player-x);
   box-shadow: 0px 5px var(--color-player-x-shawdon);
+}
+#vs-player:disabled {
+  opacity: .4;
+  cursor: not-allowed;
 }
 
 @media only screen and (max-width: 599px) {

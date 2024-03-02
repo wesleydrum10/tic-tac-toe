@@ -6,7 +6,7 @@ import { HiArrowUturnRight } from "react-icons/hi2";
 
 function App() {
   const [init, setInit] = useState(false);
-  const [choicePlayerOne, setChoicePlayerOne] = useState("");
+  const [choicePlayerOne, setChoicePlayerOne] = useState("X");
   const [choicePlayerTwo, setChoicePlayerTwo] = useState("");
   const [winnerPlayerOneTotal, setWinnerPlayerOneTotal] = useState<number>(0);
   const [winnerPlayerTwoTotal, setWinnerPlayerTwoTotal] = useState<number>(0);
@@ -151,10 +151,11 @@ function App() {
         String(winnerPlayerTwoTotal + 1)
       );
     }
+    
   }, [!gameState.winner]);
 
   useEffect(() => {
-    if (!gameState.board.includes(null) && gameState.winner === "") {
+    if (gameState.winner === '' && !gameState.board.includes(null)) {
       localStorage.setItem("@tiesGame", String(tiesTotal + 1));
     }
   }, [!gameState.board.includes(null)]);
@@ -173,7 +174,7 @@ function App() {
       setTiesTotal(parseInt(tiesStorageTotal));
     }
   }, [gameState.winner, !gameState.board.includes(null)]);
-
+  
   return (
     <body>
       {init ? (
@@ -254,7 +255,7 @@ function App() {
           >
             New game(vs cpu)
           </button>
-          <button className="options-init" id="vs-player">
+          <button disabled className="options-init" id="vs-player">
             New game(vs player)
           </button>
         </div>
