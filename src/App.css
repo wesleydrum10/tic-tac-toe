@@ -48,6 +48,7 @@ body {
   font-size: 3rem;
   color: var(--color-player-x);
   font-weight: 700;
+  cursor: pointer;
 }
 
 .box:checked {
@@ -229,9 +230,15 @@ span {
   height: 30px;
   border-radius: .4rem;
   box-shadow: 0px 3px var(--color-default-shawdon);
-  gap: 5px;
   color: var(--bg-gray-light);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: justify;
+  gap: 5px;
+  cursor: default;
 }
+
 #turn {
   font-size: 1rem;
 }
