@@ -154,7 +154,7 @@ function App() {
   }, [!!gameState.winner]);
 
   useEffect(() => {
-    if (!gameState.board.includes(null) && gameState.winner === null) {
+    if (!gameState.board.includes(null) && !!gameState.winner) {
       localStorage.setItem("@tiesGame", String(tiesTotal + 1));
     }
   }, [!gameState.board.includes(null)]);
