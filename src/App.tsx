@@ -13,7 +13,7 @@ function App() {
   const [tiesTotal, setTiesTotal] = useState<number>(0);
   const [gameState, setGameState] = useState({
     board: Array(9).fill(null),
-    winner: '',
+    winner: "",
     currentPlayer: choicePlayerOne,
     computerPlayer: choicePlayerTwo,
     turn: choicePlayerOne,
@@ -89,7 +89,7 @@ function App() {
   const resetGame = () => {
     setGameState({
       board: Array(9).fill(null),
-      winner: '',
+      winner: "",
       currentPlayer: choicePlayerOne,
       computerPlayer: choicePlayerTwo,
       turn: choicePlayerOne,
@@ -118,7 +118,7 @@ function App() {
       }
     }
 
-    return '';
+    return "";
   };
 
   useEffect(() => {
@@ -154,7 +154,7 @@ function App() {
   }, [!gameState.winner]);
 
   useEffect(() => {
-    if (!gameState.board.includes(null) && !gameState.winner) {
+    if (!gameState.board.includes(null) && gameState.winner === "") {
       localStorage.setItem("@tiesGame", String(tiesTotal + 1));
     }
   }, [!gameState.board.includes(null)]);
@@ -260,7 +260,7 @@ function App() {
         </div>
       )}
 
-      <dialog open={gameState.winner !== ''}>
+      <dialog open={gameState.winner !== ""}>
         <div id="modal">
           <p id="message-top-modal">
             {gameState.winner === choicePlayerOne ? "You Won!" : "Cpu Won!"}
