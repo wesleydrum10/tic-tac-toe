@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
@@ -8,6 +9,10 @@ function App() {
   const [init, setInit] = useState(false);
   const [choicePlayerOne, setChoicePlayerOne] = useState("X");
   const [choicePlayerTwo, setChoicePlayerTwo] = useState("");
+  const [boxesWinnerOne, setBoxesWinnerOne] = useState<number>();
+  const [boxesWinnerTwo, setBoxesWinnerTwo] = useState<number>();
+  const [boxesWinnerThree, setBoxesWinnerThree] = useState<number>();
+  const [restart, setRestart] = useState<boolean>(false);
   const [winnerPlayerOneTotal, setWinnerPlayerOneTotal] = useState<number>(0);
   const [winnerPlayerTwoTotal, setWinnerPlayerTwoTotal] = useState<number>(0);
   const [tiesTotal, setTiesTotal] = useState<number>(0);
@@ -18,11 +23,22 @@ function App() {
     computerPlayer: choicePlayerTwo,
     turn: choicePlayerOne,
   });
+  const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
 
-  const handleCellClick = (index: number) => {
+  const handleCellClick = (_e: React.MouseEvent<HTMLDivElement>, index: number) => {
     const newBoard = [...gameState.board];
     newBoard[index] = gameState.currentPlayer;
     const winningPlayer = checkWinner(newBoard);
+    applicationStyleBoxWinner(winningPlayer);
 
     if (!winningPlayer) {
       setGameState({
@@ -36,6 +52,7 @@ function App() {
         const computerMove = makeComputerMove(newBoard);
         newBoard[computerMove] = gameState.computerPlayer;
         const newWinningPlayer = checkWinner(newBoard);
+        applicationStyleBoxWinner(winningPlayer);
         setGameState({
           board: newBoard,
           currentPlayer: gameState.currentPlayer,
@@ -43,7 +60,8 @@ function App() {
           computerPlayer: gameState.computerPlayer,
           turn: gameState.currentPlayer,
         });
-      }, 2000);
+        
+      }, 1000);
     } else {
       setGameState({
         board: newBoard,
@@ -94,20 +112,78 @@ function App() {
       computerPlayer: choicePlayerTwo,
       turn: choicePlayerOne,
     });
+
+    
+    const boxOne = document.getElementById(`${boxesWinnerOne}`);
+    const boxTwo = document.getElementById(`${boxesWinnerTwo}`);
+    const boxThree = document.getElementById(`${boxesWinnerThree}`);
+
+
+    if (boxOne) {
+      boxOne.style.backgroundColor = "#1f3540";
+      boxOne.style.color = gameState.winner === "X" ? "#31c4be" : "#f2b236";
+    }
+    if (boxTwo) {
+      boxTwo.style.backgroundColor = "#1f3540";
+      boxTwo.style.color = gameState.winner === "X" ? "#31c4be" : "#f2b236";
+    }
+    if (boxThree) {
+      boxThree.style.backgroundColor = "#1f3540";
+      boxThree.style.color = gameState.winner === "X" ? "#31c4be" : "#f2b236";
+    }
+  };
+
+  const boxStyleWinner = (
+    player: string,
+    boxOne: number,
+    boxTwo: number,
+    boxThree: number
+  ) => {
+    const contentOne = document.getElementById(`${boxOne}`);
+    const contentTwo = document.getElementById(`${boxTwo}`);
+    const contentThree = document.getElementById(`${boxThree}`);
+
+    if (contentOne) {
+      contentOne.style.backgroundColor = player === "X" ? "#31c4be" : "#f2b236";
+      contentOne.style.color = "#1a2b33";
+    }
+    if (contentTwo) {
+      contentTwo.style.backgroundColor = player === "X" ? "#31c4be" : "#f2b236";
+      contentTwo.style.color = "#1a2b33";
+    }
+    if (contentThree) {
+      contentThree.style.backgroundColor =
+        player === "X" ? "#31c4be" : "#f2b236";
+      contentThree.style.color = "#1a2b33";
+    }
+  };
+
+  const applicationStyleBoxWinner = (player: string) => {
+    winningCombinations.map((_item, index) => {
+      const validateOne = gameState.board[winningCombinations[index][0]];
+      const validateTwo = gameState.board[winningCombinations[index][1]];
+      const validateThree = gameState.board[winningCombinations[index][2]];
+
+      if (
+        validateOne === player &&
+        validateTwo === player &&
+        validateThree === player
+      ) {
+        boxStyleWinner(
+          player,
+          winningCombinations[index][0],
+          winningCombinations[index][1],
+          winningCombinations[index][2]
+        );
+
+        setBoxesWinnerOne(winningCombinations[index][0]);
+        setBoxesWinnerTwo(winningCombinations[index][1]);
+        setBoxesWinnerThree(winningCombinations[index][2]);
+      }
+    });
   };
 
   const checkWinner = (board: any[]): string => {
-    const winningCombinations = [
-      [0, 1, 2],
-      [3, 4, 5],
-      [6, 7, 8],
-      [0, 3, 6],
-      [1, 4, 7],
-      [2, 5, 8],
-      [0, 4, 8],
-      [2, 4, 6],
-    ];
-
     for (const combination of winningCombinations) {
       if (
         board[combination[0]] === board[combination[1]] &&
@@ -151,11 +227,10 @@ function App() {
         String(winnerPlayerTwoTotal + 1)
       );
     }
-    
   }, [!gameState.winner]);
 
   useEffect(() => {
-    if (gameState.winner === '' && !gameState.board.includes(null)) {
+    if (gameState.winner === "" && !gameState.board.includes(null)) {
       localStorage.setItem("@tiesGame", String(tiesTotal + 1));
     }
   }, [!gameState.board.includes(null)]);
@@ -174,7 +249,11 @@ function App() {
       setTiesTotal(parseInt(tiesStorageTotal));
     }
   }, [gameState.winner, !gameState.board.includes(null)]);
-  
+
+  useEffect(() => {
+    applicationStyleBoxWinner(gameState.winner);
+  }, [gameState.winner]);
+
   return (
     <body>
       {init ? (
@@ -192,7 +271,7 @@ function App() {
               className="box turn"
               id="icon-return"
               onClick={() => {
-                setInit(!init), resetGame();
+                setRestart(!restart);
               }}
             >
               {<HiArrowUturnRight />}
@@ -204,7 +283,7 @@ function App() {
               id={String(index)}
               className="box"
               style={{ color: item === "X" ? "#31c4be" : "#f2b236" }}
-              onClick={() => handleCellClick(index)}
+              onClick={(e) => handleCellClick(e, index)}
             >
               {item}
             </div>
@@ -267,7 +346,14 @@ function App() {
             {gameState.winner === choicePlayerOne ? "You Won!" : "Cpu Won!"}
           </p>
           <div id="takes-round-modal">
-            <h2 id="current-winner-modal">{gameState.winner}</h2>
+            <h2
+              id="current-winner-modal"
+              style={{
+                color: gameState.winner === "X" ? "#31c4be" : "#f2b236",
+              }}
+            >
+              {gameState.winner}
+            </h2>
             <h5>Takes The Round</h5>
           </div>
           <div className="buttons-modal">
@@ -315,6 +401,33 @@ function App() {
           </div>
         </div>
       </dialog>
+      {restart && (
+        <dialog open={restart}>
+          <div id="modal">
+            <div id="msg-restart-modal">
+              <h5>Restart Game?</h5>
+            </div>
+            <div className="buttons-modal">
+              <button
+                className="box turn"
+                id="btn-quit-modal"
+                onClick={() => setRestart(!restart)}
+              >
+                No, Cancel
+              </button>
+              <button
+                className="box turn"
+                id="btn-next-round-modal"
+                onClick={() => {
+                  resetGame(), setInit(!init), setRestart(!restart);
+                }}
+              >
+                Yes, Restart
+              </button>
+            </div>
+          </div>
+        </dialog>
+      )}
     </body>
   );
 }

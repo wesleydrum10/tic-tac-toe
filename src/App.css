@@ -156,22 +156,8 @@ dialog[open]::backdrop {
   padding: 0 10px;
 }
 
-@keyframes animate {
-  0% {
-    opacity: 0;
-  }
-  25% {
-    opacity: 0.5;
-  }
-  50% {
-    opacity: 1;
-  }
-  75% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 0;
-  }
+#msg-restart-modal {
+  color: var(--bg-gray-light);
 }
 
 span {
