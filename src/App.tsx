@@ -4,11 +4,15 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { HiArrowUturnRight } from "react-icons/hi2";
+import { IoSettingsOutline } from "react-icons/io5";
 
 function App() {
-  const [init, setInit] = useState(false);
+  const [init, setInit] = useState<boolean>(false);
+  const [gameVsCpu, setGameVsCpu] = useState<boolean>(false);
+  const [removeStorage, setRemoveStorage] = useState<boolean>(false);
   const [choicePlayerOne, setChoicePlayerOne] = useState("X");
   const [choicePlayerTwo, setChoicePlayerTwo] = useState("");
+  const [currentPlayer, setCurrentPlayer] = useState("X");
   const [boxesWinnerOne, setBoxesWinnerOne] = useState<number>();
   const [boxesWinnerTwo, setBoxesWinnerTwo] = useState<number>();
   const [boxesWinnerThree, setBoxesWinnerThree] = useState<number>();
@@ -34,42 +38,63 @@ function App() {
     [2, 4, 6],
   ];
 
-  const handleCellClick = (_e: React.MouseEvent<HTMLDivElement>, index: number) => {
-    const newBoard = [...gameState.board];
-    newBoard[index] = gameState.currentPlayer;
-    const winningPlayer = checkWinner(newBoard);
-    applicationStyleBoxWinner(winningPlayer);
+  const handleCellClick = (
+    _e: React.MouseEvent<HTMLDivElement>,
+    index: number
+  ) => {
+    if (gameVsCpu) {
+      const newBoard = [...gameState.board];
+      newBoard[index] = gameState.currentPlayer;
+      const winningPlayer = checkWinner(newBoard);
+      applicationStyleBoxWinner(winningPlayer);
 
-    if (!winningPlayer) {
-      setGameState({
-        board: newBoard,
-        currentPlayer: gameState.currentPlayer,
-        winner: winningPlayer,
-        computerPlayer: gameState.computerPlayer,
-        turn: gameState.computerPlayer,
-      });
-      setTimeout(() => {
-        const computerMove = makeComputerMove(newBoard);
-        newBoard[computerMove] = gameState.computerPlayer;
-        const newWinningPlayer = checkWinner(newBoard);
-        applicationStyleBoxWinner(winningPlayer);
+      if (!winningPlayer) {
         setGameState({
           board: newBoard,
           currentPlayer: gameState.currentPlayer,
-          winner: newWinningPlayer,
+          winner: winningPlayer,
           computerPlayer: gameState.computerPlayer,
-          turn: gameState.currentPlayer,
+          turn: gameState.computerPlayer,
         });
-        
-      }, 1000);
+        setTimeout(() => {
+          const computerMove = makeComputerMove(newBoard);
+          newBoard[computerMove] = gameState.computerPlayer;
+          const newWinningPlayer = checkWinner(newBoard);
+          applicationStyleBoxWinner(winningPlayer);
+          setGameState({
+            board: newBoard,
+            currentPlayer: gameState.currentPlayer,
+            winner: newWinningPlayer,
+            computerPlayer: gameState.computerPlayer,
+            turn: gameState.currentPlayer,
+          });
+        }, 1000);
+      } else {
+        setGameState({
+          board: newBoard,
+          currentPlayer: gameState.currentPlayer,
+          winner: winningPlayer,
+          computerPlayer: gameState.computerPlayer,
+          turn: winningPlayer,
+        });
+      }
     } else {
-      setGameState({
-        board: newBoard,
-        currentPlayer: gameState.currentPlayer,
-        winner: winningPlayer,
-        computerPlayer: gameState.computerPlayer,
-        turn: winningPlayer,
-      });
+      if (gameState.board[index] === null && !gameState.winner) {
+        const newBoard = [...gameState.board];
+        newBoard[index] = currentPlayer;
+
+        const winningPlayer = checkWinner(newBoard);
+        applicationStyleBoxWinner(winningPlayer);
+
+        setGameState({
+          board: newBoard,
+          currentPlayer: currentPlayer === "X" ? "O" : "X",
+          winner: winningPlayer,
+          computerPlayer: gameState.computerPlayer,
+          turn: currentPlayer === "X" ? "O" : "X",
+        });
+        setCurrentPlayer(currentPlayer === "X" ? "O" : "X");
+      }
     }
   };
 
@@ -113,11 +138,9 @@ function App() {
       turn: choicePlayerOne,
     });
 
-    
     const boxOne = document.getElementById(`${boxesWinnerOne}`);
     const boxTwo = document.getElementById(`${boxesWinnerTwo}`);
     const boxThree = document.getElementById(`${boxesWinnerThree}`);
-
 
     if (boxOne) {
       boxOne.style.backgroundColor = "#1f3540";
@@ -289,7 +312,9 @@ function App() {
             </div>
           ))}
           <div className={choicePlayerOne === "O" ? "count choice-o" : "count"}>
-            <span id="play-you">{choicePlayerOne}(You)</span>
+            <span id="play-you">
+              {choicePlayerOne} {!gameVsCpu ? "(Player 1)" : "(You)"}
+            </span>
             <span id="count-you">{winnerPlayerOneTotal}</span>
           </div>
           <div className="count ties">
@@ -297,7 +322,9 @@ function App() {
             <span id="count-tie">{tiesTotal}</span>
           </div>
           <div className={choicePlayerOne === "X" ? "count choice-o" : "count"}>
-            <span id="play-cpu">{choicePlayerTwo}(Cpu)</span>
+            <span id="play-cpu">
+              {choicePlayerTwo} {!gameVsCpu ? "(Player 2)" : "(Cpu)"}
+            </span>
             <span id="count-cpu">{winnerPlayerTwoTotal}</span>
           </div>
         </div>
@@ -311,15 +338,17 @@ function App() {
             <p>Pick player 1's maker</p>
             <div id="init-content-choice">
               <button
-                className="btn-choice"
-                autoFocus={choicePlayerOne === "X"}
+                className={
+                  choicePlayerOne === "X" ? "btn-choice clicked" : "btn-choice"
+                }
                 onClick={() => setChoicePlayerOne("X")}
               >
                 X
               </button>
               <button
-                className="btn-choice"
-                autoFocus={choicePlayerOne === "O"}
+                className={
+                  choicePlayerOne === "O" ? "btn-choice clicked" : "btn-choice"
+                }
                 onClick={() => setChoicePlayerOne("O")}
               >
                 O
@@ -328,23 +357,60 @@ function App() {
             <p id="remember">Remember {choicePlayerOne} Goes First</p>
           </div>
           <button
-            onClick={() => setInit(!init)}
+            onClick={() => {
+              setInit(!init), setGameVsCpu(!gameVsCpu);
+            }}
             className="options-init"
             id="vs-cpu"
           >
             New game(vs cpu)
           </button>
-          <button disabled className="options-init" id="vs-player">
+          <button
+            onClick={() => {
+              setInit(!init), setGameVsCpu(false);
+            }}
+            className="options-init"
+            id="vs-player"
+          >
             New game(vs player)
           </button>
+          {!!localStorage.length && (
+            <span onClick={() => setRemoveStorage(!removeStorage)}>
+              {
+                <IoSettingsOutline
+                  color="#fff"
+                  fontSize={16}
+                  cursor="pointer"
+                />
+              }
+            </span>
+          )}
+          {removeStorage && (
+            <button
+              onClick={() => {
+                localStorage.clear(), window.location.reload();
+              }}
+              className="options-init"
+            >
+              Clear history of games
+            </button>
+          )}
         </div>
       )}
 
       <dialog open={gameState.winner !== ""}>
         <div id="modal">
-          <p id="message-top-modal">
-            {gameState.winner === choicePlayerOne ? "You Won!" : "Cpu Won!"}
-          </p>
+          {!gameVsCpu ? (
+            <p id="message-top-modal">
+              {gameState.winner === choicePlayerOne
+                ? "Player 1 Won!"
+                : "Player 2 Won!"}
+            </p>
+          ) : (
+            <p id="message-top-modal">
+              {gameState.winner === choicePlayerOne ? "You Won!" : "Cpu Won!"}
+            </p>
+          )}
           <div id="takes-round-modal">
             <h2
               id="current-winner-modal"
