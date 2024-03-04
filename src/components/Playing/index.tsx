@@ -41,7 +41,7 @@ export const Playing = () => {
       {gameState.board.map((item, index) => (
         <BoxContent
           key={index}
-          $boxColor={item === "X" ? 'var(--color-player-x)' : "var(--color-player-o)" }
+          style={{color: item === "X" ? 'var(--color-player-x)' : 'var(--color-player-o)'}}
           id={String(index)}
           className="box"
           onClick={(e) => handleCellClick(e, index)}

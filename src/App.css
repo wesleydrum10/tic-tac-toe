@@ -88,6 +88,7 @@ dialog[open]::backdrop {
   width: 100vw !important;
   background-color: var(--bg-gray-box);
   text-align: center;
+  gap: 10px;
 }
 
 #message-top-modal {

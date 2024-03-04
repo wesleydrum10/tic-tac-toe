@@ -45,7 +45,7 @@ export const BoxContent = styled.div<{$boxColor?: string}>`
   box-shadow: 0px 5px var(--color-default-shawdon);
   border: 1px solid transparent;
   font-size: 3rem;
-  color: ${props => props.$boxColor};
+  color: ${props => props.$boxColor === "X" ? '#31c4be' : '#f2b236' };
   font-weight: 700;
   cursor: pointer;
 `;
