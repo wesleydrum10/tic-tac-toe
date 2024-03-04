@@ -390,7 +390,7 @@ function App() {
               onClick={() => {
                 localStorage.clear(), window.location.reload();
               }}
-              className="options-init"
+              className="options-init clicked"
             >
               Clear history of games
             </button>
