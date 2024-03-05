@@ -8,7 +8,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import '../../public/sounds/winner.mp3'
 
 interface RulesProviderProps {
   children: ReactNode;

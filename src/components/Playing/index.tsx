@@ -72,7 +72,7 @@ export const Playing = () => {
       {gameState.winner && (
         <div>
           <Sound
-            url="../../public/sounds/winner.mp3"
+            url="../../public/winner.mp3"
             playStatus="PLAYING"
           ></Sound>
         </div>

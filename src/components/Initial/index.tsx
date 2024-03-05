@@ -82,7 +82,7 @@ export const Initial = () => {
         </button>
       )}
       <Sound
-        url="../../public/sounds/init.mp3"
+        url="../../public/init.mp3"
         playStatus="PLAYING"
         autoLoad
         loop
