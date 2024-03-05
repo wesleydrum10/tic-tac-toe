@@ -14,6 +14,7 @@ function Home() {
     choicePlayerOne,
     gameState,
     gameVsCpu,
+    setIsClick
   } = useRules();
   return (
     <body>
@@ -26,6 +27,7 @@ function Home() {
           restart={restart}
           setInit={setInit}
           setRestart={setRestart}
+          setIsClick={setIsClick}
         />
       )}
       {gameState.winner !== "" && (
@@ -37,6 +39,7 @@ function Home() {
           gameVsCpu={gameVsCpu}
           choicePlayerOne={choicePlayerOne}
           gameState={gameState}
+          setIsClick={setIsClick}
         />
       )}
       {!gameState.board.includes(null) && (
@@ -46,6 +49,7 @@ function Home() {
           resetGame={() => resetGame()}
           init={init}
           gameState={gameState}
+          setIsClick={setIsClick}
         />
       )}
     </body>

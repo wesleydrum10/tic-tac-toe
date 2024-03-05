@@ -2,6 +2,7 @@ import { useRules } from "../../context/useRules";
 import "../../App.css";
 import { IoSettingsOutline } from "react-icons/io5";
 import Sound from "react-sound";
+const { VITE_APP_PUBLIC_URL, VITE_APP_SOUND_INIT } = import.meta.env;
 
 export const Initial = () => {
   const {
@@ -13,6 +14,10 @@ export const Initial = () => {
     setGameVsCpu,
     setRemoveStorage,
     removeStorage,
+    isSound,
+    setIsSound,
+    setVolume,
+    volume,
   } = useRules();
   return (
     <div className="choice-init-container">
@@ -60,33 +65,51 @@ export const Initial = () => {
       >
         New game(vs player)
       </button>
-      {!!localStorage.length && (
-        <span onClick={() => setRemoveStorage(!removeStorage)}>
-          {
-            <IoSettingsOutline
-              color="var(--color-white)"
-              fontSize={16}
-              cursor="pointer"
-            />
-          }
-        </span>
-      )}
+      <span onClick={() => setRemoveStorage(!removeStorage)}>
+        {
+          <IoSettingsOutline
+            color="var(--color-white)"
+            fontSize={16}
+            cursor="pointer"
+          />
+        }
+      </span>
       {removeStorage && (
-        <button
-          onClick={() => {
-            localStorage.clear(), window.location.reload();
-          }}
-          className="options-init clicked"
-        >
-          Clear the game scoreboard
-        </button>
+        <>
+          <button
+            onClick={() => {
+              localStorage.clear(), window.location.reload();
+            }}
+            className="options-init clicked"
+          >
+            Clear the game scoreboard
+          </button>
+          <button
+            className="options-init clicked"
+            onClick={() => setIsSound(!isSound)}
+          >
+            {isSound ? "Turn off sound" : "Turn on sound"}
+          </button>
+          <div className="volume-container">
+            <p>Adjust volume</p>
+
+            <input
+              type="range"
+              min={0}
+              max={30}
+              value={volume}
+              onChange={(e) => setVolume(e.target.value)}
+            />
+            <output>{volume}</output>
+          </div>
+        </>
       )}
       <Sound
-        url="../../public/init.mp3"
-        playStatus="PLAYING"
+        url={`${VITE_APP_PUBLIC_URL}${VITE_APP_SOUND_INIT}`}
+        playStatus={isSound ? "PLAYING" : "STOPPED"}
         autoLoad
         loop
-        volume={30}
+        volume={parseInt(volume)}
       ></Sound>
     </div>
   );

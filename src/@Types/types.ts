@@ -13,12 +13,14 @@ export interface ModalRestartProps {
   setInit: (params: boolean) => void;
   init: boolean;
   restart: boolean;
+  setIsClick: (params: boolean) => void;
 }
 
 export interface ModalWinnerProps {
   open: boolean;
   resetGame: () => void;
   setInit: (params: boolean) => void;
+  setIsClick: (params: boolean) => void;
   init: boolean;
   choicePlayerOne: string;
   gameState: {
@@ -36,6 +38,7 @@ export interface ModalTiesProps {
   resetGame: () => void;
   setInit: (params: boolean) => void;
   init: boolean;
+  setIsClick: (params: boolean) => void;
   gameState: {
     board: [null] | any[];
     winner: string;

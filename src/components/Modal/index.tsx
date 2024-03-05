@@ -16,6 +16,7 @@ export const ModalRestart = ({
   setInit,
   init,
   restart,
+  setIsClick
 }: ModalRestartProps) => {
   return (
     <Modal open={open}>
@@ -34,7 +35,7 @@ export const ModalRestart = ({
           className="box turn"
           id="btn-next-round-modal"
           onClick={() => {
-            resetGame(), setInit(!init), setRestart(!restart);
+            resetGame(), setInit(!init), setRestart(!restart), setIsClick(false);
           }}
         >
           Yes, Restart
@@ -50,7 +51,8 @@ export const ModalWinner = ({
     setInit,
     init,
     gameVsCpu,
-    gameState
+    gameState,
+    setIsClick
 }: ModalWinnerProps) => {
   return (
     <Modal open={gameState.winner !== ""}>
@@ -81,7 +83,7 @@ export const ModalWinner = ({
           className="box turn"
           id="btn-quit-modal"
           onClick={() => {
-            resetGame(), setInit(!init);
+            resetGame(), setInit(!init), setIsClick(false)
           }}
         >
           Quit
@@ -89,7 +91,7 @@ export const ModalWinner = ({
         <button
           className="box turn"
           id="btn-next-round-modal"
-          onClick={() => resetGame()}
+          onClick={() => {resetGame(); setIsClick(false)}}
         >
           Next Round
         </button>
@@ -98,7 +100,7 @@ export const ModalWinner = ({
   );
 };
 
-export const ModalTies = ({gameState, resetGame, setInit, init}: ModalTiesProps) => {
+export const ModalTies = ({gameState, resetGame, setInit, init, setIsClick}: ModalTiesProps) => {
   return (
     <Modal open={!gameState.board.includes(null)}>
       <div id="takes-round-modal">
@@ -109,7 +111,7 @@ export const ModalTies = ({gameState, resetGame, setInit, init}: ModalTiesProps)
           className="box turn"
           id="btn-quit-modal"
           onClick={() => {
-            resetGame(), setInit(!init);
+            resetGame(), setInit(!init), setIsClick(false);
           }}
         >
           Quit
@@ -117,7 +119,7 @@ export const ModalTies = ({gameState, resetGame, setInit, init}: ModalTiesProps)
         <button
           className="box turn"
           id="btn-next-round-modal"
-          onClick={() => resetGame()}
+          onClick={() => {resetGame(); setIsClick(false)}}
         >
           Next Round
         </button>

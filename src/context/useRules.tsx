@@ -16,6 +16,10 @@ interface RulesProviderProps {
 interface RulesContextData {
   setInit: (params: boolean) => void;
   init: boolean;
+  setIsSound: (params: boolean) => void;
+  isSound: boolean;
+  setIsClick: (params: boolean) => void;
+  isClick: boolean;
   setGameVsCpu: (params: boolean) => void;
   gameVsCpu: boolean;
   setRemoveStorage: (params: boolean) => void;
@@ -40,6 +44,8 @@ interface RulesContextData {
   winnerPlayerTwoTotal: number;
   setTiesTotal: (params: number) => void;
   tiesTotal: number;
+  setVolume: (params: string) => void;
+  volume: string;
   gameState: {
     board: [null] | any[];
     winner: string;
@@ -58,6 +64,8 @@ const RulesContext = createContext<RulesContextData>({} as RulesContextData);
 
 export const RulesProvider = ({ children }: RulesProviderProps) => {
   const [init, setInit] = useState<boolean>(false);
+  const [isSound, setIsSound] = useState<boolean>(true);
+  const [isClick, setIsClick] = useState<boolean>(false);
   const [gameVsCpu, setGameVsCpu] = useState<boolean>(false);
   const [removeStorage, setRemoveStorage] = useState<boolean>(false);
   const [choicePlayerOne, setChoicePlayerOne] = useState("X");
@@ -69,6 +77,7 @@ export const RulesProvider = ({ children }: RulesProviderProps) => {
   const [restart, setRestart] = useState<boolean>(false);
   const [winnerPlayerOneTotal, setWinnerPlayerOneTotal] = useState<number>(0);
   const [winnerPlayerTwoTotal, setWinnerPlayerTwoTotal] = useState<number>(0);
+  const [volume, setVolume] = useState<string>('10');
   const [tiesTotal, setTiesTotal] = useState<number>(0);
   const [gameState, setGameState] = useState({
     board: Array(9).fill(null),
@@ -97,7 +106,6 @@ export const RulesProvider = ({ children }: RulesProviderProps) => {
       newBoard[index] = gameState.currentPlayer;
       const winningPlayer = checkWinner(newBoard);
       applicationStyleBoxWinner(winningPlayer);
-
       if (!winningPlayer) {
         setGameState({
           board: newBoard,
@@ -120,6 +128,7 @@ export const RulesProvider = ({ children }: RulesProviderProps) => {
           });
         }, 1000);
       } else {
+        setIsClick(false)
         setGameState({
           board: newBoard,
           currentPlayer: gameState.currentPlayer,
@@ -165,7 +174,6 @@ export const RulesProvider = ({ children }: RulesProviderProps) => {
         return move;
       }
     }
-
     return availableMoves[Math.floor(Math.random() * availableMoves.length)];
   };
 
@@ -284,11 +292,11 @@ export const RulesProvider = ({ children }: RulesProviderProps) => {
   useEffect(() => {
     if (choicePlayerOne === "X") {
       setChoicePlayerTwo("O");
-      setCurrentPlayer(choicePlayerOne)
+      setCurrentPlayer(choicePlayerOne);
     }
     if (choicePlayerOne === "O") {
       setChoicePlayerTwo("X");
-      setCurrentPlayer(choicePlayerOne)
+      setCurrentPlayer(choicePlayerOne);
     }
 
     setGameState({
@@ -340,6 +348,7 @@ export const RulesProvider = ({ children }: RulesProviderProps) => {
     applicationStyleBoxWinner(gameState.winner);
   }, [gameState.winner]);
 
+  console.log('isClick', isClick)
   return (
     <RulesContext.Provider
       value={{
@@ -372,6 +381,12 @@ export const RulesProvider = ({ children }: RulesProviderProps) => {
         gameState,
         handleCellClick,
         resetGame,
+        isSound,
+        setIsSound,
+        isClick,
+        setIsClick,
+        volume,
+        setVolume
       }}
     >
       {children}

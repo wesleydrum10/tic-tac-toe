@@ -3,6 +3,7 @@ import { BoxContent, HomeContainer } from "./styles";
 import { useRules } from "../../context/useRules";
 import "../../App.css";
 import Sound from "react-sound";
+const { VITE_APP_SOUND_TIES, VITE_APP_PUBLIC_URL, VITE_APP_SOUND_WINNER, VITE_APP_SOUND_CLICK } = import.meta.env;
 
 export const Playing = () => {
   const {
@@ -16,6 +17,8 @@ export const Playing = () => {
     choicePlayerTwo,
     winnerPlayerTwoTotal,
     handleCellClick,
+    isClick,
+    setIsClick,
   } = useRules();
 
   return (
@@ -48,7 +51,9 @@ export const Playing = () => {
           }}
           id={String(index)}
           className="box"
-          onClick={(e) => handleCellClick(e, index)}
+          onClick={(e) => {
+            handleCellClick(e, index); setIsClick(true)
+          }}
         >
           {item}
         </BoxContent>
@@ -70,12 +75,22 @@ export const Playing = () => {
         <span id="count-cpu">{winnerPlayerTwoTotal}</span>
       </div>
       {gameState.winner && (
-        <div>
-          <Sound
-            url="../../public/winner.mp3"
-            playStatus="PLAYING"
-          ></Sound>
-        </div>
+        <Sound
+          url={`${VITE_APP_PUBLIC_URL}${VITE_APP_SOUND_WINNER}`}
+          playStatus="PLAYING"
+        ></Sound>
+      )}
+      {!gameState.winner && !gameState.board.includes(null) && (
+        <Sound
+          url={`${VITE_APP_PUBLIC_URL}${VITE_APP_SOUND_TIES}`}
+          playStatus="PLAYING"
+        ></Sound>
+      )}
+      {isClick && (
+        <Sound
+          url={`${VITE_APP_PUBLIC_URL}${VITE_APP_SOUND_CLICK}`}
+          playStatus="PLAYING"
+        ></Sound>
       )}
     </HomeContainer>
   );
