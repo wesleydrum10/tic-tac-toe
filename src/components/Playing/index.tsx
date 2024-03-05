@@ -1,7 +1,8 @@
 import { HiArrowUturnRight } from "react-icons/hi2";
 import { BoxContent, HomeContainer } from "./styles";
 import { useRules } from "../../context/useRules";
-import '../../App.css'
+import "../../App.css";
+import Sound from "react-sound";
 
 export const Playing = () => {
   const {
@@ -14,9 +15,9 @@ export const Playing = () => {
     tiesTotal,
     choicePlayerTwo,
     winnerPlayerTwoTotal,
-    handleCellClick
+    handleCellClick,
   } = useRules();
-  
+
   return (
     <HomeContainer>
       <div className="top left">
@@ -41,7 +42,10 @@ export const Playing = () => {
       {gameState.board.map((item, index) => (
         <BoxContent
           key={index}
-          style={{color: item === "X" ? 'var(--color-player-x)' : 'var(--color-player-o)'}}
+          style={{
+            color:
+              item === "X" ? "var(--color-player-x)" : "var(--color-player-o)",
+          }}
           id={String(index)}
           className="box"
           onClick={(e) => handleCellClick(e, index)}
@@ -65,6 +69,14 @@ export const Playing = () => {
         </span>
         <span id="count-cpu">{winnerPlayerTwoTotal}</span>
       </div>
+      {gameState.winner && (
+        <div>
+          <Sound
+            url="../../public/sounds/winner.mp3"
+            playStatus="PLAYING"
+          ></Sound>
+        </div>
+      )}
     </HomeContainer>
   );
 };
