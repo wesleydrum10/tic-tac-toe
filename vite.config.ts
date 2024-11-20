@@ -18,6 +18,11 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
+            src: '../public/icons/icon-144x144.png',
+            sizes: '144x144',
+            type: 'image/png'
+          },
+          {
             src: '../public/icons/icon-256x256.png',
             sizes: '256x256',
             type: 'image/png'
