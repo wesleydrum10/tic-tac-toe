@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'robots.txt', 'icons/*.png'],
+      includeAssets: ['favicon.ico', 'icons/*.png'],
       manifest: {
         name: 'Tic Tac Toe',
         short_name: 'Jogo da velha',
@@ -18,12 +18,12 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: 'icons/X.png',
+            src: './icons/X.png',
             sizes: '44x44',
             type: 'image/png'
           },
           {
-            src: 'icons/X.png',
+            src: './icons/X.png',
             sizes: '44x44',
             type: 'image/png'
           }
