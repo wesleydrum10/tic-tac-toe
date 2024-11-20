@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter } from "react-router-dom";
 import GlobalStyles from "./styles/global";
 import { Router } from "./router";
-import { RulesProvider } from "./context/useRules";
+import { RulesProvider } from "./context/useRules"; 
 
 function App() {
   return (
