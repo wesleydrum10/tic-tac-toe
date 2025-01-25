@@ -18,35 +18,37 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: "/android-chrome-192x192.png",
+            src: "./public/icons/android-chrome-192x192.png",
             sizes: "192x192",
-            type: "image/png"
+            type: "image/png",
+            purpose: 'any'
           },
           {
-            src: "/android-chrome-512x512.png",
+            src: "./public/icons/android-chrome-512x512.png",
             sizes: "512x512",
-            type: "image/png"
+            type: "image/png",
+            purpose: 'any'
           },
           {
-            src: '../public/icons/icon-44x44.png',
+            src: './public/icons/icon-44x44.png',
             sizes: '44x44',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '../public/icons/icon-144x144.png',
+            src: './public/icons/icon-144x144.png',
             sizes: '144x144',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '../public/icons/icon-256x256.png',
+            src: './public/icons/icon-256x256.png',
             sizes: '256x256',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '../public/icons/icon-512x512.png',
+            src: './public/icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any'
